@@ -2,8 +2,12 @@ import React from 'react';
 import {View} from 'react-native';
 import Landing from './Landing';
 import Authenticate from './Authenticate';
+import CheckIn from './CheckIn';
+import DriversLicenseScan from './DriversLicenseScan';
+import Rules from './Rules';
 import Home from './Home';
-import User from './User';
+import UserEdit from './UserEdit';
+import UserInfo from './UserInfo';
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 import {createDrawerNavigator} from 'react-navigation-drawer';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
@@ -11,7 +15,7 @@ import {createStackNavigator} from 'react-navigation-stack';
 
 const MainTabs = createBottomTabNavigator({
   Home: Home,
-  User: User,
+  User: UserInfo,
 });
 const MainDrawer = createDrawerNavigator({
   MainTabs: MainTabs,
@@ -19,8 +23,25 @@ const MainDrawer = createDrawerNavigator({
 const HomeStack = createStackNavigator(
   {
     HomePage: MainDrawer,
+    CheckInPage: {screen: CheckIn},
+    DriversLicenseScanPage: {screen: DriversLicenseScan},
+    RulesPage: {screen: Rules},
+    UserInfoPage: UserInfo,
+    UserEditPage: {screen: UserEdit},
   },
   {
+    initialRouteName: 'HomePage',
+    mode: 'modal',
+    headerMode: 'none',
+  },
+);
+const UserStack = createStackNavigator(
+  {
+    UserInfoPage: UserInfo,
+    UserEditPage: {screen: UserEdit},
+  },
+  {
+    initialRouteName: 'UserInfoPage',
     mode: 'modal',
     headerMode: 'none',
   },
@@ -33,9 +54,6 @@ const AuthStack = createStackNavigator(
     AuthenticatePage: {
       screen: Authenticate,
     },
-    // DriversLicenseScanPage: {
-    //   screen: DriversLicenseScan,
-    // },
   },
   {
     initialRouteName: 'LandingPage',
@@ -46,6 +64,7 @@ const RootSwitch = createSwitchNavigator({
     screen: AuthStack,
   },
   HomePage: HomeStack,
+  // UserInfoPage: UserStack,
 });
 const MainContainer = createAppContainer(RootSwitch);
 

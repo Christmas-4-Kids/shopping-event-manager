@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import styles from '../styles';
 
-const DriversLicenseScan = props => {
+const Rules = props => {
   return (
     <SafeAreaView>
       <ScrollView
@@ -30,4 +30,4 @@ const DriversLicenseScan = props => {
   );
 };
 
-export default DriversLicenseScan;
+export default Rules;

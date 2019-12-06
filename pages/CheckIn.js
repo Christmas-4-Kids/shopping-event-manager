@@ -7,8 +7,11 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import styles from '../styles';
+import {useUser} from '../contexts/user.context';
 
-const DriversLicenseScan = props => {
+const CheckIn = props => {
+  const [user, setUser] = useUser();
+  console.log(user);
   return (
     <SafeAreaView>
       <ScrollView
@@ -30,4 +33,4 @@ const DriversLicenseScan = props => {
   );
 };
 
-export default DriversLicenseScan;
+export default CheckIn;

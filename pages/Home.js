@@ -1,11 +1,51 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {
+  SafeAreaView,
+  ScrollView,
+  View,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
+import styles from '../styles';
+import {useUser} from '../contexts/user.context';
 
-const Home = () => {
+const Home = props => {
+  const [user, setUser] = useUser();
+  console.log(user);
   return (
-    <View style={{flex: 1}}>
-      <Text>Home</Text>
-    </View>
+    <SafeAreaView>
+      <ScrollView
+        contentInsetAdjustmentBehavior="automatic"
+        style={styles.scrollView}>
+        <View style={{flex: 1}}>
+          <View style={styles.body}>
+            <View style={styles.sectionContainer}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => props.navigation.navigate('CheckInPage')}>
+                <Text style={styles.buttonText}> Check In </Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.sectionContainer}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() =>
+                  props.navigation.navigate('DriversLicenseScanPage')
+                }>
+                <Text style={styles.buttonText}> Verify Driver's License </Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.sectionContainer}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => props.navigation.navigate('RulesPage')}>
+                <Text style={styles.buttonText}> Read Rules </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
