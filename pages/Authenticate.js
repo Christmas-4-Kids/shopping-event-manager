@@ -12,7 +12,7 @@ const Authenticate = props => {
     let firestoreUser = null;
     const querySnapshot = await firestore()
       .collection('members')
-      .where('email_lower', '==', user.Email.toLowerCase())
+      .where('emailLower', '==', user.email.toLowerCase())
       .get();
     const firestoreUserList = [];
     querySnapshot.forEach(doc => {
@@ -23,8 +23,8 @@ const Authenticate = props => {
     if (firestoreUserList.length > 1) {
       const match = firestoreUserList.filter(firestoreUser => {
         return (
-          firestoreUser.Phone.replace(/\D/g, '') ===
-          user.Phone.replace(/\D/g, '')
+          firestoreUser.phone.replace(/\D/g, '') ===
+          user.phone.replace(/\D/g, '')
         );
       });
       if (match.length === 1) {
@@ -53,30 +53,30 @@ const Authenticate = props => {
           <Text>First Name</Text>
           <TextInput
             style={styles.textInput}
-            onChangeText={handleChange('FirstName')}
-            onBlur={handleBlur('FirstName')}
-            value={values.FirstName}
+            onChangeText={handleChange('firstName')}
+            onBlur={handleBlur('firstName')}
+            value={values.firstName}
           />
           <Text>Last Name</Text>
           <TextInput
             style={styles.textInput}
-            onChangeText={handleChange('LastName')}
-            onBlur={handleBlur('LastName')}
-            value={values.LastName}
+            onChangeText={handleChange('lastName')}
+            onBlur={handleBlur('lastName')}
+            value={values.lastName}
           />
           <Text>Email</Text>
           <TextInput
             style={styles.textInput}
-            onChangeText={handleChange('Email')}
-            onBlur={handleBlur('Email')}
-            value={values.Email}
+            onChangeText={handleChange('email')}
+            onBlur={handleBlur('email')}
+            value={values.email}
           />
           <Text>Phone</Text>
           <TextInput
             style={styles.textInput}
-            onChangeText={handleChange('Phone')}
-            onBlur={handleBlur('Phone')}
-            value={values.Phone}
+            onChangeText={handleChange('phone')}
+            onBlur={handleBlur('phone')}
+            value={values.phone}
           />
           <View style={styles.sectionContainer}>
             <TouchableOpacity style={styles.button} onPress={handleSubmit}>

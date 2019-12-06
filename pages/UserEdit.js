@@ -12,7 +12,7 @@ const UserEdit = props => {
     let firestoreUser = null;
     const querySnapshot = await firestore()
       .collection('members')
-      .where('email_lower', '==', user.Email.toLowerCase())
+      .where('emailLower', '==', user.email.toLowerCase())
       .get();
     const firestoreUserList = [];
     querySnapshot.forEach(doc => {
@@ -36,24 +36,24 @@ const UserEdit = props => {
 
     if (firestoreUser) {
       // update firebase user
-      firestoreUser.FirstName = user.FirstName;
-      firestoreUser.LastName = user.LastName;
-      firestoreUser.Email = user.Email;
-      firestoreUser.email_lower = user.Email.toLowerCase();
-      firestoreUser.Phone = user.Phone;
-      firestoreUser.LastUpdated = new Date();
+      firestoreUser.firstName = user.firstName;
+      firestoreUser.lastName = user.lastName;
+      firestoreUser.email = user.email;
+      firestoreUser.emailLower = user.email.toLowerCase();
+      firestoreUser.phone = user.phone;
+      firestoreUser.lastUpdated = new Date();
       firestoreUser.type = user.type;
       setUser(firestoreUser);
       await firestore()
         .collection('members')
         .doc(firestoreUser.firestoreId)
         .update({
-          FirstName: firestoreUser.FirstName,
-          LastName: firestoreUser.LastName,
-          Email: firestoreUser.Email,
-          email_lower: firestoreUser.email_lower,
-          Phone: firestoreUser.Phone,
-          LastUpdated: firestoreUser.LastUpdated,
+          firstName: firestoreUser.firstName,
+          lastName: firestoreUser.lastName,
+          email: firestoreUser.email,
+          emailLower: firestoreUser.emailLower,
+          phone: firestoreUser.phone,
+          lastUpdated: firestoreUser.lastUpdated,
           type: firestoreUser.type,
           firestoreId: firestoreUser.firestoreId,
         });
@@ -73,30 +73,30 @@ const UserEdit = props => {
             <Text>First Name</Text>
             <TextInput
               style={styles.textInput}
-              onChangeText={handleChange('FirstName')}
-              onBlur={handleBlur('FirstName')}
-              value={values.FirstName}
+              onChangeText={handleChange('firstName')}
+              onBlur={handleBlur('firstName')}
+              value={values.firstName}
             />
             <Text>Last Name</Text>
             <TextInput
               style={styles.textInput}
-              onChangeText={handleChange('LastName')}
-              onBlur={handleBlur('LastName')}
-              value={values.LastName}
+              onChangeText={handleChange('lastName')}
+              onBlur={handleBlur('lastName')}
+              value={values.lastName}
             />
             <Text>Email</Text>
             <TextInput
               style={styles.textInput}
-              onChangeText={handleChange('Email')}
-              onBlur={handleBlur('Email')}
-              value={values.Email}
+              onChangeText={handleChange('email')}
+              onBlur={handleBlur('email')}
+              value={values.email}
             />
             <Text>Phone</Text>
             <TextInput
               style={styles.textInput}
-              onChangeText={handleChange('Phone')}
-              onBlur={handleBlur('Phone')}
-              value={values.Phone}
+              onChangeText={handleChange('phone')}
+              onBlur={handleBlur('phone')}
+              value={values.phone}
             />
             <View style={styles.sectionContainer}>
               <TouchableOpacity style={styles.button} onPress={handleSubmit}>
