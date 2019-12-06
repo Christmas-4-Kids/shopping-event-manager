@@ -18,7 +18,7 @@ const Rules = props => {
           <View style={styles.body}>
             <View style={styles.sectionContainer}>
               <TouchableOpacity
-                style={styles.button}
+                style={styles.closeButton}
                 onPress={() => props.navigation.pop()}>
                 <Text style={styles.buttonText}> Close </Text>
               </TouchableOpacity>

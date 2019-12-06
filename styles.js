@@ -20,6 +20,12 @@ export default styles = StyleSheet.create({
     fontSize: 18,
     color: '#FFF',
   },
+  closeButton: {
+    backgroundColor: '#D02B42', //'#EF334C',
+    padding: 20,
+    alignItems: 'center',
+    borderRadius: 10,
+  },
   engine: {
     position: 'absolute',
     right: 0,
@@ -35,6 +41,7 @@ export default styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 20,
     padding: 5,
+    color: '#000',
   },
   sectionContainer: {
     marginTop: 32,
@@ -61,5 +68,19 @@ export default styles = StyleSheet.create({
     padding: 4,
     paddingRight: 12,
     textAlign: 'right',
+  },
+  goodScan: {
+    textAlign: 'center',
+    color: '#32CD32',
+    fontSize: 60,
+    fontWeight: '800',
+    padding: 20,
+  },
+  badScan: {
+    textAlign: 'center',
+    color: '#EF334C',
+    fontSize: 40,
+    fontWeight: '700',
+    padding: 20,
   },
 });
