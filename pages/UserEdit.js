@@ -23,8 +23,8 @@ const UserEdit = props => {
     if (firestoreUserList.length > 1) {
       const match = firestoreUserList.filter(firestoreUser => {
         return (
-          firestoreUser.Phone.replace(/\D/g, '') ===
-          user.Phone.replace(/\D/g, '')
+          firestoreUser.phone.replace(/\D/g, '') ===
+          user.phone.replace(/\D/g, '')
         );
       });
       if (match.length === 1) {

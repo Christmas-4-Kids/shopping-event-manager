@@ -14,16 +14,16 @@ const UserInfo = props => {
         <View style={styles.sectionContainer}>
           <Text>Name</Text>
           <Text style={styles.sectionTitle}>
-            {user.FirstName} {user.LastName}
+            {user.firstName} {user.lastName}
           </Text>
         </View>
         <View style={styles.sectionContainer}>
           <Text>Email</Text>
-          <Text style={styles.sectionTitle}>{user.Email}</Text>
+          <Text style={styles.sectionTitle}>{user.email}</Text>
         </View>
         <View style={styles.sectionContainer}>
           <Text>Phone</Text>
-          <Text style={styles.sectionTitle}>{user.Phone}</Text>
+          <Text style={styles.sectionTitle}>{user.phone}</Text>
         </View>
 
         <View style={styles.sectionContainer}>

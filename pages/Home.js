@@ -11,7 +11,6 @@ import {useUser} from '../contexts/user.context';
 
 const Home = props => {
   const [user, setUser] = useUser();
-  console.log(user);
   return (
     <SafeAreaView>
       <ScrollView
@@ -19,22 +18,26 @@ const Home = props => {
         style={styles.scrollView}>
         <View style={{flex: 1}}>
           <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => props.navigation.navigate('CheckInPage')}>
-                <Text style={styles.buttonText}> Check In </Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.sectionContainer}>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() =>
-                  props.navigation.navigate('DriversLicenseScanPage')
-                }>
-                <Text style={styles.buttonText}> Verify Driver's License </Text>
-              </TouchableOpacity>
-            </View>
+            {user.type === 'Chaperone' && (
+              <View style={styles.sectionContainer}>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => props.navigation.navigate('CheckInPage')}>
+                  <Text style={styles.buttonText}> Check In </Text>
+                </TouchableOpacity>
+              </View>
+            )}
+            {user.type === 'Organizer' && (
+              <View style={styles.sectionContainer}>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() =>
+                    props.navigation.navigate('DriversLicenseScanPage')
+                  }>
+                  <Text style={styles.buttonText}>Verify Driver's License</Text>
+                </TouchableOpacity>
+              </View>
+            )}
             <View style={styles.sectionContainer}>
               <TouchableOpacity
                 style={styles.button}
