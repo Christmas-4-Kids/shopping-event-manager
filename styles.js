@@ -26,6 +26,14 @@ export default styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 10,
   },
+  nativeCloseContainer: {
+    alignItems: 'flex-end',
+    right: 1,
+  },
+  nativeClose: {
+    marginRight: 30,
+    marginTop: 10,
+  },
   engine: {
     position: 'absolute',
     right: 0,
@@ -82,5 +90,34 @@ export default styles = StyleSheet.create({
     fontSize: 40,
     fontWeight: '700',
     padding: 20,
+  },
+  member: {
+    marginTop: 15,
+    paddingHorizontal: 10,
+  },
+  memberRow: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  memberColumn: {
+    flex: 1,
+    flexDirection: 'column',
+  },
+  memberPhone: {
+    alignItems: 'flex-end',
+    right: 1,
+  },
+  memberName: {
+    fontSize: 16,
+  },
+  memberVerified: {
+    fontSize: 16,
+  },
+  memberNotVerified: {
+    fontSize: 16,
+  },
+  memberAddress: {
+    color: '#898989',
   },
 });

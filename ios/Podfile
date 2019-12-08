@@ -34,8 +34,8 @@ target 'shoppingEventManager' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
   pod 'RNFBApp', :path => '../node_modules/@react-native-firebase/app' 
-
   pod 'blinkid-react-native', :path => '../node_modules/blinkid-react-native'
+  pod 'RNSVG', :path => '../node_modules/react-native-svg'
 
   target 'shoppingEventManagerTests' do
     inherit! :search_paths

@@ -8,6 +8,7 @@ import Rules from './Rules';
 import Home from './Home';
 import UserEdit from './UserEdit';
 import UserInfo from './UserInfo';
+import MemberList from './MemberList';
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 import {createDrawerNavigator} from 'react-navigation-drawer';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
@@ -25,6 +26,7 @@ const HomeStack = createStackNavigator(
     HomePage: MainDrawer,
     CheckInPage: {screen: CheckIn},
     DriversLicenseScanPage: {screen: DriversLicenseScan},
+    MemberListPage: {screen: MemberList},
     RulesPage: {screen: Rules},
     UserInfoPage: UserInfo,
     UserEditPage: {screen: UserEdit},

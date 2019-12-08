@@ -28,14 +28,25 @@ const Home = props => {
               </View>
             )}
             {user.type === 'Organizer' && (
-              <View style={styles.sectionContainer}>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() =>
-                    props.navigation.navigate('DriversLicenseScanPage')
-                  }>
-                  <Text style={styles.buttonText}>Verify Driver's License</Text>
-                </TouchableOpacity>
+              <View>
+                <View style={styles.sectionContainer}>
+                  <TouchableOpacity
+                    style={styles.button}
+                    onPress={() =>
+                      props.navigation.navigate('DriversLicenseScanPage')
+                    }>
+                    <Text style={styles.buttonText}>
+                      Verify Driver's License
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.sectionContainer}>
+                  <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => props.navigation.navigate('MemberListPage')}>
+                    <Text style={styles.buttonText}>View Chaperones</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             )}
             <View style={styles.sectionContainer}>
