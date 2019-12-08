@@ -105,7 +105,7 @@ const UserEdit = props => {
             </View>
             <View style={styles.sectionContainer}>
               <TouchableOpacity
-                style={styles.button}
+                style={styles.closeButton}
                 onPress={() => props.navigation.pop()}>
                 <Text style={styles.buttonText}> Cancel </Text>
               </TouchableOpacity>
