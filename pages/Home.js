@@ -18,7 +18,7 @@ const Home = props => {
         style={styles.scrollView}>
         <View style={{flex: 1}}>
           <View style={styles.body}>
-            {user.type === 'Chaperone' && (
+            {/* {user.type === 'Chaperone' && (
               <View style={styles.sectionContainer}>
                 <TouchableOpacity
                   style={styles.button}
@@ -26,7 +26,7 @@ const Home = props => {
                   <Text style={styles.buttonText}> Check In </Text>
                 </TouchableOpacity>
               </View>
-            )}
+            )} */}
             {user.type === 'Organizer' && (
               <View>
                 <View style={styles.sectionContainer}>
