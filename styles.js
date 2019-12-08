@@ -51,6 +51,11 @@ export default styles = StyleSheet.create({
     padding: 5,
     color: '#000',
   },
+  errorMessage: {
+    color: 'red',
+    fontSize: 16,
+    textAlign: 'center',
+  },
   sectionContainer: {
     marginTop: 32,
     paddingHorizontal: 24,

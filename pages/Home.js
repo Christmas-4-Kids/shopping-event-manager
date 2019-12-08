@@ -56,6 +56,13 @@ const Home = props => {
                 <Text style={styles.buttonText}> Read Rules </Text>
               </TouchableOpacity>
             </View>
+            <View style={styles.sectionContainer}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => props.navigation.navigate('SchedulePage')}>
+                <Text style={styles.buttonText}> Schedule </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </ScrollView>

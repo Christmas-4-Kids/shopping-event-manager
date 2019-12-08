@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import styles from '../styles';
-import {LearnMoreLinks} from 'react-native/Libraries/NewAppScreen';
 import {useUser} from '../contexts/user.context';
 
 const Landing = props => {

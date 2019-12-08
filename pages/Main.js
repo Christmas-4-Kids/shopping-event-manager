@@ -9,6 +9,7 @@ import Home from './Home';
 import UserEdit from './UserEdit';
 import UserInfo from './UserInfo';
 import MemberList from './MemberList';
+import Schedule from './Schedule';
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 import {createDrawerNavigator} from 'react-navigation-drawer';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
@@ -28,6 +29,7 @@ const HomeStack = createStackNavigator(
     DriversLicenseScanPage: {screen: DriversLicenseScan},
     MemberListPage: {screen: MemberList},
     RulesPage: {screen: Rules},
+    SchedulePage: {screen: Schedule},
     UserInfoPage: UserInfo,
     UserEditPage: {screen: UserEdit},
   },
