@@ -490,6 +490,8 @@ PODS:
     - React-cxxreact (= 0.61.2)
     - React-jsi (= 0.61.2)
     - ReactCommon/jscallinvoker (= 0.61.2)
+  - RNDeviceInfo (5.4.0):
+    - React
   - RNFBApp (6.1.0):
     - Firebase/Core (~> 6.13.0)
     - React
@@ -498,18 +500,18 @@ PODS:
     - Firebase/Database (~> 6.13.0)
     - React
     - RNFBApp
-  - RNFBFirestore (6.1.0):
+  - RNFBFirestore (6.2.0):
     - Firebase/Core (~> 6.13.0)
     - Firebase/Firestore (~> 6.13.0)
     - React
     - RNFBApp
-  - RNGestureHandler (1.5.0):
+  - RNGestureHandler (1.4.1):
     - React
-  - RNReanimated (1.4.0):
+  - RNReanimated (1.3.0):
     - React
   - RNScreens (1.0.0-alpha.23):
     - React
-  - RNSVG (9.13.3):
+  - RNSVG (9.13.6):
     - React
   - Yoga (1.14.0)
 
@@ -542,6 +544,7 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/jscallinvoker (from `../node_modules/react-native/ReactCommon`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBDatabase (from `../node_modules/@react-native-firebase/database`)"
   - "RNFBFirestore (from `../node_modules/@react-native-firebase/firestore`)"
@@ -626,6 +629,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/Libraries/Vibration"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNDeviceInfo:
+    :path: "../node_modules/react-native-device-info"
   RNFBApp:
     :path: "../node_modules/@react-native-firebase/app"
   RNFBDatabase:
@@ -645,7 +650,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   abseil: 18063d773f5366ff8736a050fe035a28f635fd27
-  blinkid-react-native: 4ea8eb7e25ce41e1524c710e25594d57f6ef415b
+  blinkid-react-native: 702017d1d5ef5db0841e1a7850202f0a34d1add3
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   BoringSSL-GRPC: db8764df3204ccea016e1c8dd15d9a9ad63ff318
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
@@ -690,15 +695,16 @@ SPEC CHECKSUMS:
   React-RCTText: e3ef6191cdb627855ff7fe8fa0c1e14094967fb8
   React-RCTVibration: fb54c732fd20405a76598e431aa2f8c2bf527de9
   ReactCommon: 5848032ed2f274fcb40f6b9ec24067787c42d479
+  RNDeviceInfo: c7b1dc457611b9231bb780a882102e2c93edc7af
   RNFBApp: edeadb99669dd39f9d7f8f7f68d420fda4d8b7d8
   RNFBDatabase: ea3ddca0ea9b90c5b06ef1e7929808c78912b6a8
-  RNFBFirestore: bd3644bd512cc6f78e13d34ea13e7e642ac3c1b2
-  RNGestureHandler: a4ddde1ffc6e590c8127b8b7eabfdade45475c74
-  RNReanimated: b2ab0b693dddd2339bd2f300e770f6302d2e960c
+  RNFBFirestore: 5de4ae898df51a3ecc16a45db15019836c5cec87
+  RNGestureHandler: 4cb47a93019c1a201df2644413a0a1569a51c8aa
+  RNReanimated: 6abbbae2e5e72609d85aabd92a982a94566885f1
   RNScreens: f28b48b8345f2f5f39ed6195518291515032a788
-  RNSVG: f6177f8d7c095fada7cfee2e4bb7388ba426064c
+  RNSVG: 8ba35cbeb385a52fd960fd28db9d7d18b4c2974f
   Yoga: 14927e37bd25376d216b150ab2a561773d57911f
 
-PODFILE CHECKSUM: 063ff50fcf6789bfad63ee997463473ee6a99e35
+PODFILE CHECKSUM: 14154e7ca1b51bc163be0ede4de486c961531060
 
 COCOAPODS: 1.8.4

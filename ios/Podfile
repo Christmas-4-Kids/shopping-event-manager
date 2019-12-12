@@ -37,6 +37,8 @@ target 'shoppingEventManager' do
   pod 'blinkid-react-native', :path => '../node_modules/blinkid-react-native'
   pod 'RNSVG', :path => '../node_modules/react-native-svg'
 
+  pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
+
   target 'shoppingEventManagerTests' do
     inherit! :search_paths
     # Pods for testing

@@ -11,7 +11,7 @@ const UserEdit = props => {
     // get firebase user
     let firestoreUser = null;
     const querySnapshot = await firestore()
-      .collection('members')
+      .collection(user.collection)
       .where('emailLower', '==', user.email.toLowerCase())
       .get();
     const firestoreUserList = [];
@@ -45,7 +45,7 @@ const UserEdit = props => {
       firestoreUser.type = user.type;
       setUser(firestoreUser);
       await firestore()
-        .collection('members')
+        .collection(firestoreUser.collection)
         .doc(firestoreUser.firestoreId)
         .update({
           firstName: firestoreUser.firstName,
@@ -64,34 +64,32 @@ const UserEdit = props => {
   };
   return (
     <View style={styles.page}>
-      <View style={styles.sectionContainer}>
-        <Text style={styles.sectionTitle}>Update User Information</Text>
-      </View>
+      <Text style={styles.sectionTitle}>Update User Information</Text>
       <Formik initialValues={user} onSubmit={values => updateUser(values)}>
         {({handleChange, handleBlur, handleSubmit, values}) => (
           <View style={styles.sectionContainer}>
-            <Text>First Name</Text>
+            <Text style={styles.sectionText}>First Name</Text>
             <TextInput
               style={styles.textInput}
               onChangeText={handleChange('firstName')}
               onBlur={handleBlur('firstName')}
               value={values.firstName}
             />
-            <Text>Last Name</Text>
+            <Text style={styles.sectionText}>Last Name</Text>
             <TextInput
               style={styles.textInput}
               onChangeText={handleChange('lastName')}
               onBlur={handleBlur('lastName')}
               value={values.lastName}
             />
-            <Text>Email</Text>
+            <Text style={styles.sectionText}>Email</Text>
             <TextInput
               style={styles.textInput}
               onChangeText={handleChange('email')}
               onBlur={handleBlur('email')}
               value={values.email}
             />
-            <Text>Phone</Text>
+            <Text style={styles.sectionText}>Phone</Text>
             <TextInput
               style={styles.textInput}
               onChangeText={handleChange('phone')}

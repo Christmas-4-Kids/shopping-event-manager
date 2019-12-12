@@ -6,12 +6,13 @@ export default styles = StyleSheet.create({
     flex: 1,
     paddingTop: 30,
     paddingBottom: 20,
+    backgroundColor: '#112430',
   },
   scrollView: {
-    backgroundColor: Colors.lighter,
+    backgroundColor: '#112430',
   },
   button: {
-    backgroundColor: '#112430',
+    backgroundColor: '#EF334C',
     padding: 20,
     alignItems: 'center',
     borderRadius: 10,
@@ -21,7 +22,7 @@ export default styles = StyleSheet.create({
     color: '#FFF',
   },
   closeButton: {
-    backgroundColor: '#D02B42', //'#EF334C',
+    backgroundColor: '#EF334C', //'#EF334C',
     padding: 20,
     alignItems: 'center',
     borderRadius: 10,
@@ -39,7 +40,7 @@ export default styles = StyleSheet.create({
     right: 0,
   },
   body: {
-    backgroundColor: '#FFF',
+    backgroundColor: '#112430',
   },
   textInput: {
     height: 50,
@@ -49,7 +50,7 @@ export default styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 20,
     padding: 5,
-    color: '#000',
+    color: '#fff',
   },
   errorMessage: {
     color: 'red',
@@ -57,19 +58,24 @@ export default styles = StyleSheet.create({
     textAlign: 'center',
   },
   sectionContainer: {
+    flex: 1,
+    backgroundColor: '#112430',
     marginTop: 32,
     paddingHorizontal: 24,
   },
   sectionTitle: {
     fontSize: 24,
     fontWeight: '600',
-    color: Colors.black,
+    color: '#fff',
   },
   sectionDescription: {
     marginTop: 8,
     fontSize: 18,
     fontWeight: '400',
-    color: Colors.dark,
+    color: '#fff',
+  },
+  sectionText: {
+    color: '#fff',
   },
   highlight: {
     fontWeight: '700',

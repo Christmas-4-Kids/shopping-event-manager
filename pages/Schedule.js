@@ -33,32 +33,28 @@ const Schedule = props => {
     };
   }, []);
   return (
-    <SafeAreaView>
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={styles.scrollView}>
-        <View style={{flex: 1}}>
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              {!!schedule &&
-                schedule.events.map(event => (
-                  <View style={styles.sectionContainer} key={event.order}>
-                    <Text style={styles.sectionTitle}>{event.time}</Text>
-                    <Text style={styles.sectionDescription}>{event.name}</Text>
-                  </View>
-                ))}
-            </View>
-            <View style={styles.sectionContainer}>
-              <TouchableOpacity
-                style={styles.closeButton}
-                onPress={() => props.navigation.pop()}>
-                <Text style={styles.buttonText}> Close </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
+    <View style={styles.page}>
+      <View style={styles.sectionContainer}>
+        <ScrollView
+          contentInsetAdjustmentBehavior="automatic"
+          contentContainerStyle={{flexGrow: 1}}>
+          {!!schedule &&
+            schedule.events.map(event => (
+              <View style={styles.sectionContainer} key={event.order}>
+                <Text style={styles.sectionTitle}>{event.time}</Text>
+                <Text style={styles.sectionDescription}>{event.name}</Text>
+              </View>
+            ))}
+        </ScrollView>
+        <View styles={styles.sectionContainer}>
+          <TouchableOpacity
+            style={styles.closeButton}
+            onPress={() => props.navigation.pop()}>
+            <Text style={styles.buttonText}> Close </Text>
+          </TouchableOpacity>
         </View>
-      </ScrollView>
-    </SafeAreaView>
+      </View>
+    </View>
   );
 };
 

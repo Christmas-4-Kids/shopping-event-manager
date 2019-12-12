@@ -1,27 +1,105 @@
 import React, {useEffect, useState} from 'react';
-import {
-  SafeAreaView,
-  TouchableOpacity,
-  AppRegistry,
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  ScrollView,
-  Button,
-} from 'react-native';
+import {TouchableOpacity, Platform, Text, View, Image} from 'react-native';
 import styles from '../styles';
 const BlinkIDReactNative = require('blinkid-react-native');
 import firestore from '@react-native-firebase/firestore';
 
 const DriversLicenseScan = props => {
+  const lebanonChaperones = 'lebanonChaperones';
+  const allDayChaperones = 'allDayChaperones';
+  const eveningChaperones = 'eveningChaperones';
+  const drivers = 'drivers';
   const [driversLicense, setDriversLicense] = useState();
   const [
     userHasValidDriversLicenseAndMailchimpMember,
     setUserHasValidDriversLicenseAndMailchimpMember,
   ] = useState(false);
   const [scanComplete, setScanComplete] = useState(false);
+  const [firestoreMembers, setFirestoreMembers] = useState([]);
+  const [fetchComplete, setFetchComplete] = useState(false);
+  const [updatedFirestoreUser, setUpdatedFirestoreUser] = useState(false);
+  let firestoreCalls = 0;
+
+  function appendFirestoreMembers(members) {
+    console.log(`adding ${members.length} members`);
+    setFirestoreMembers(state => [...state, ...members]);
+    firestoreCalls++;
+    if (firestoreCalls === 4) setFetchComplete(true);
+  }
+
+  useEffect(() => {
+    let members = [];
+    const lebanonUnsubscribe = firestore()
+      .collection(lebanonChaperones)
+      .orderBy('lastNameLower')
+      .onSnapshot({
+        error: e => console.error(e),
+        next: querySnapshot => {
+          members = [];
+          querySnapshot.forEach(doc => {
+            let d = doc.data();
+            d.firestoreId = doc.id;
+            d.collection = lebanonChaperones;
+            members.push(d);
+          });
+          appendFirestoreMembers(members);
+        },
+      });
+    const allDayUnsubscribe = firestore()
+      .collection(allDayChaperones)
+      .orderBy('lastNameLower')
+      .onSnapshot({
+        error: e => console.error(e),
+        next: querySnapshot => {
+          members = [];
+          querySnapshot.forEach(doc => {
+            let d = doc.data();
+            d.firestoreId = doc.id;
+            d.collection = allDayChaperones;
+            members.push(d);
+          });
+          appendFirestoreMembers(members);
+        },
+      });
+    const eveningUnsubscribe = firestore()
+      .collection(eveningChaperones)
+      .orderBy('lastNameLower')
+      .onSnapshot({
+        error: e => console.error(e),
+        next: querySnapshot => {
+          members = [];
+          querySnapshot.forEach(doc => {
+            let d = doc.data();
+            d.firestoreId = doc.id;
+            d.collection = eveningChaperones;
+            members.push(d);
+          });
+          appendFirestoreMembers(members);
+        },
+      });
+    const driversUnsubscribe = firestore()
+      .collection(drivers)
+      .orderBy('lastNameLower')
+      .onSnapshot({
+        error: e => console.error(e),
+        next: querySnapshot => {
+          members = [];
+          querySnapshot.forEach(doc => {
+            let d = doc.data();
+            d.firestoreId = doc.id;
+            d.collection = drivers;
+            members.push(d);
+          });
+          appendFirestoreMembers(members);
+        },
+      });
+    return () => {
+      allDayUnsubscribe();
+      eveningUnsubscribe();
+      lebanonUnsubscribe();
+      driversUnsubscribe();
+    };
+  }, []);
 
   useEffect(() => {
     try {
@@ -31,53 +109,57 @@ const DriversLicenseScan = props => {
       let driversLicenseFirstNameMatchesFirestoreUser = false;
       let firestoreUser = null;
 
-      async function updateFirestoreUser() {
+      console.log('firestoreMembers: ' + firestoreMembers.length);
+
+      async function updateFirestoreUser(collection) {
+        console.log('updating user', firestoreUser);
         await firestore()
-          .collection('members')
+          .collection(collection)
           .doc(firestoreUser.firestoreId)
           .update({
             driversLicense: firestoreUser.driversLicense,
             verified: true,
           });
+        setUpdatedFirestoreUser(true);
       }
-      async function getFirestoreUser() {
-        const querySnapshot = await firestore()
-          .collection('members')
-          .where(
-            'lastNameLower',
-            '==',
-            driversLicense.lastName.toLowerCase().trim(),
-          )
-          .get();
-        const firestoreUserList = [];
-        querySnapshot.forEach(doc => {
-          let d = doc.data();
-          d.firestoreId = doc.id;
-          firestoreUserList.push(d);
+
+      function getMatch(matchingLastNames, driversLicense) {
+        if (!matchingLastNames) return [];
+        const matchingFirstNames = matchingLastNames.filter(user => {
+          return (
+            user.firstName.toLowerCase().trim() ===
+            driversLicense.firstName
+              .split(' ')[0]
+              .toLowerCase()
+              .trim()
+          );
         });
-        if (firestoreUserList.length > 1) {
+        console.log(`got ${matchingFirstNames} matching first names`);
+        return matchingFirstNames;
+      }
+
+      function getFirestoreUser() {
+        const lastName = driversLicense.lastName.toLowerCase().trim();
+        console.log(`looking for last name: ${lastName}`);
+        let matchingLastNames = firestoreMembers.filter(m => {
+          const foundMatch = m.lastNameLower === lastName;
+          return foundMatch;
+        });
+        console.log(`got ${matchingLastNames.length} matching last names`);
+        if (matchingLastNames.length >= 1) {
           driversLicenseLastNameMatchesFirestoreUser = true;
-          const match = firestoreUserList.filter(firestoreUser => {
-            return (
-              firestoreUser.firstName.toLowerCase().trim() ===
-              driversLicense.firstName
-                .split(' ')[0]
-                .toLowerCase()
-                .trim()
-            );
-          });
-          if (match.length === 1) {
-            driversLicenseFirstNameMatchesFirestoreUser = true;
-            firestoreUser = match[0];
-          }
-        } else if (firestoreUserList.length === 1) {
-          firestoreUser = firestoreUserList[0];
+        }
+        const match = getMatch(matchingLastNames, driversLicense);
+        if (match.length === 1) {
+          driversLicenseFirstNameMatchesFirestoreUser = true;
+          firestoreUser = match[0];
         }
 
         if (firestoreUser) {
           // update firebase user
+          console.log('found user');
           firestoreUser.driversLicense = driversLicense;
-          updateFirestoreUser();
+          updateFirestoreUser(firestoreUser.collection);
         }
         driversLicenseNameMatchesFirestoreUser =
           driversLicenseFirstNameMatchesFirestoreUser &&
@@ -299,90 +381,81 @@ const DriversLicenseScan = props => {
   let displayFields = state.results;
 
   return (
-    <SafeAreaView>
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={styles.scrollView}>
-        <View style={{flex: 1}}>
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <View style={styles.container}>
-                <View style={styles.sectionContainer}>
-                  <View style={styles.buttonContainer}>
-                    <TouchableOpacity
-                      style={styles.button}
-                      onPress={scan.bind(this)}>
-                      <Text style={styles.buttonText}> Scan </Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-                <View style={styles.sectionContainer}>
-                  {state.showImageDocument && (
-                    <View style={styles.imageContainer}>
-                      <Image
-                        resizeMode="contain"
-                        source={{uri: displayImageDocument, scale: 3}}
-                        style={styles.imageResult}
-                      />
-                    </View>
-                  )}
-                  {state.showImageFace && (
-                    <View style={styles.imageContainer}>
-                      <Image
-                        resizeMode="contain"
-                        source={{uri: displayImageFace, scale: 3}}
-                        style={styles.imageResult}
-                      />
-                    </View>
-                  )}
-                  {state.showSuccessFrame && (
-                    <View style={styles.imageContainer}>
-                      <Image
-                        resizeMode="contain"
-                        source={{uri: displaySuccessFrame, scale: 3}}
-                        style={styles.imageResult}
-                      />
-                    </View>
-                  )}
-                  <View style={styles.sectionContainer}>
-                    {scanComplete &&
-                      userHasValidDriversLicenseAndMailchimpMember && (
-                        <Text style={styles.goodScan}>GOOD</Text>
-                      )}
-                    {scanComplete &&
-                      !userHasValidDriversLicenseAndMailchimpMember && (
-                        <Text style={styles.badScan}>
-                          Couldn't find exact match
-                        </Text>
-                      )}
-                  </View>
-                  <View style={styles.sectionContainer}>
-                    {scanComplete && (
-                      <View style={styles.sectionContainer}>
-                        <Text>Name</Text>
-                        <Text style={styles.sectionTitle}>
-                          {driversLicense.firstName.split(' ')[0]}{' '}
-                          {driversLicense.lastName}
-                        </Text>
-                      </View>
-                    )}
-                  </View>
-                </View>
-              </View>
-              <View styles={styles.sectionContainer}>
-                <View styles={styles.buttonContainer}>
-                  <TouchableOpacity
-                    style={styles.closeButton}
-                    onPress={() => props.navigation.pop()}>
-                    <Text style={styles.buttonText}> Close </Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
+    <View style={styles.page}>
+      <View style={styles.sectionContainer}>
+        <View style={styles.sectionContainer}>
+          {fetchComplete && (
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity style={styles.button} onPress={scan.bind(this)}>
+                <Text style={styles.buttonText}> Scan </Text>
+              </TouchableOpacity>
             </View>
+          )}
+        </View>
+        <View style={styles.sectionContainer}>
+          {state.showImageDocument && (
+            <View style={styles.imageContainer}>
+              <Image
+                resizeMode="contain"
+                source={{uri: displayImageDocument, scale: 3}}
+                style={styles.imageResult}
+              />
+            </View>
+          )}
+          {state.showImageFace && (
+            <View style={styles.imageContainer}>
+              <Image
+                resizeMode="contain"
+                source={{uri: displayImageFace, scale: 3}}
+                style={styles.imageResult}
+              />
+            </View>
+          )}
+          {state.showSuccessFrame && (
+            <View style={styles.imageContainer}>
+              <Image
+                resizeMode="contain"
+                source={{uri: displaySuccessFrame, scale: 3}}
+                style={styles.imageResult}
+              />
+            </View>
+          )}
+          <View style={styles.sectionContainer}>
+            {scanComplete &&
+              userHasValidDriversLicenseAndMailchimpMember &&
+              updatedFirestoreUser(<Text style={styles.goodScan}>GOOD</Text>)}
+            {scanComplete && !userHasValidDriversLicenseAndMailchimpMember && (
+              <Text style={styles.badScan}>Couldn't find exact match</Text>
+            )}
+            {scanComplete &&
+              userHasValidDriversLicenseAndMailchimpMember &&
+              !updatedFirestoreUser && (
+                <Text style={styles.badScan}>
+                  Couldn't update user license info
+                </Text>
+              )}
+          </View>
+          <View style={styles.sectionContainer}>
+            {scanComplete && (
+              <View style={styles.sectionContainer}>
+                <Text>Name</Text>
+                <Text style={styles.sectionTitle}>
+                  {driversLicense.firstName.split(' ')[0]}{' '}
+                  {driversLicense.lastName}
+                </Text>
+              </View>
+            )}
           </View>
         </View>
-      </ScrollView>
-    </SafeAreaView>
+        <View styles={styles.sectionContainer}>
+          <TouchableOpacity
+            style={styles.closeButton}
+            onPress={() => props.navigation.pop()}>
+            <Text style={styles.buttonText}> Close </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </View>
   );
 };
 

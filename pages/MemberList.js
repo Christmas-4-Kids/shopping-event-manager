@@ -1,34 +1,11 @@
-import React, {useReducer, useEffect, useState} from 'react';
-import {SafeAreaView, ScrollView, View, Text, Button} from 'react-native';
+import React, {useEffect} from 'react';
+import {ScrollView, View, Text, Button, TouchableOpacity} from 'react-native';
 import styles from '../styles';
-import firestore from '@react-native-firebase/firestore';
 import call from 'react-native-phone-call';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faTimes, faCheck, faMobile} from '@fortawesome/free-solid-svg-icons';
 
 const MemberList = props => {
-  const [memberList, setMemberList] = useState();
-  useEffect(() => {
-    let members = [];
-    const unsubscribe = firestore()
-      .collection('members')
-      .orderBy('lastNameLower')
-      .onSnapshot({
-        error: e => console.error(e),
-        next: querySnapshot => {
-          querySnapshot.forEach(doc => {
-            let d = doc.data();
-            d.firestoreId = doc.id;
-            members.push(d);
-          });
-          setMemberList(members);
-        },
-      });
-    return () => {
-      unsubscribe();
-    };
-  }, []);
-
   const makeCall = number => {
     const args = {
       number: number, // String value with the number to call
@@ -38,86 +15,85 @@ const MemberList = props => {
   };
 
   return (
-    <SafeAreaView>
-      <View style={styles.nativeCloseContainer}>
-        <Button
-          style={styles.nativeClose}
-          onPress={() => props.navigation.pop()}
-          title="Close"
-        />
-      </View>
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={styles.scrollView}>
-        <View style={{flex: 1}}>
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              {!!memberList &&
-                memberList.map(member => (
-                  <View style={styles.member} key={member.firestoreId}>
-                    <View style={styles.memberRow}>
-                      <View style={styles.memberColumn}>
-                        <Text style={styles.memberName}>
-                          {member.firstName} {member.lastName}
-                        </Text>
-                        <Text style={styles.memberAddress}>
-                          {!!member.driversLicense &&
-                            member.driversLicense.address}
-                        </Text>
-                      </View>
-                      <View>
-                        {member.type && (
-                          <FontAwesomeIcon
-                            icon={faMobile}
-                            size={25}
-                            color={'green'}
-                          />
-                        )}
-                        {!member.type && (
-                          <FontAwesomeIcon
-                            icon={faMobile}
-                            size={25}
-                            color={'lightgray'}
-                          />
-                        )}
-                      </View>
-                      <View>
-                        {member.verified && (
-                          <FontAwesomeIcon
-                            icon={faCheck}
-                            size={30}
-                            color={'green'}
-                          />
-                        )}
-                        {!member.verified && (
-                          <FontAwesomeIcon
-                            icon={faTimes}
-                            size={30}
-                            color={'red'}
-                          />
-                        )}
-                      </View>
-                      <View>
-                        <Button
-                          title="Call"
-                          onPress={() =>
-                            makeCall(member.phone.replace(/\D/g, ''))
-                          }
+    <View style={styles.page}>
+      <View style={styles.sectionContainer}>
+        <ScrollView
+          contentInsetAdjustmentBehavior="automatic"
+          contentContainerStyle={{flexGrow: 1}}>
+          <View>
+            {!!props.memberList &&
+              props.memberList.length > 0 &&
+              props.memberList.map(member => (
+                <View style={styles.member} key={member.firestoreId}>
+                  <View style={styles.memberRow}>
+                    <View style={styles.memberColumn}>
+                      <Text style={styles.memberName}>
+                        {member.firstName} {member.lastName}
+                      </Text>
+                      <Text style={styles.memberAddress}>
+                        {!!member.driversLicense &&
+                          member.driversLicense.address}
+                      </Text>
+                    </View>
+                    <View>
+                      {member.type && (
+                        <FontAwesomeIcon
+                          icon={faMobile}
+                          size={25}
+                          color={'green'}
                         />
-                      </View>
+                      )}
+                      {!member.type && (
+                        <FontAwesomeIcon
+                          icon={faMobile}
+                          size={25}
+                          color={'lightgray'}
+                        />
+                      )}
+                    </View>
+                    <View>
+                      {member.verified && (
+                        <FontAwesomeIcon
+                          icon={faCheck}
+                          size={30}
+                          color={'green'}
+                        />
+                      )}
+                      {!member.verified && (
+                        <FontAwesomeIcon
+                          icon={faTimes}
+                          size={30}
+                          color={'red'}
+                        />
+                      )}
+                    </View>
+                    <View>
+                      <Button
+                        title="Call"
+                        onPress={() =>
+                          makeCall(member.phone.replace(/\D/g, ''))
+                        }
+                      />
                     </View>
                   </View>
-                ))}
-              {!memberList && (
-                <View style={styles.sectionContainer}>
-                  <Text style="textAlign: 'center'">Loading...</Text>
                 </View>
-              )}
-            </View>
+              ))}
+            {!props.memberList && (
+              <View style={styles.sectionContainer}>
+                <Text style={styles.sectionText}>Loading...</Text>
+              </View>
+            )}
           </View>
+        </ScrollView>
+        <View styles={styles.sectionContainer}>
+          <TouchableOpacity
+            style={styles.closeButton}
+            onPress={() => props.navigation.pop()}>
+            <Text style={styles.buttonText}> Close </Text>
+          </TouchableOpacity>
         </View>
-      </ScrollView>
-    </SafeAreaView>
+      </View>
+    </View>
   );
 };
 
