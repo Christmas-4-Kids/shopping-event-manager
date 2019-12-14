@@ -3,102 +3,22 @@ import {TouchableOpacity, Platform, Text, View, Image} from 'react-native';
 import styles from '../styles';
 const BlinkIDReactNative = require('blinkid-react-native');
 import firestore from '@react-native-firebase/firestore';
+import {addCollectionsToFirestoreMembers} from '../services/firestore.service';
 
 const DriversLicenseScan = props => {
-  const lebanonChaperones = 'lebanonChaperones';
-  const allDayChaperones = 'allDayChaperones';
-  const eveningChaperones = 'eveningChaperones';
-  const drivers = 'drivers';
   const [driversLicense, setDriversLicense] = useState();
   const [
     userHasValidDriversLicenseAndMailchimpMember,
     setUserHasValidDriversLicenseAndMailchimpMember,
   ] = useState(false);
   const [scanComplete, setScanComplete] = useState(false);
-  const [firestoreMembers, setFirestoreMembers] = useState([]);
-  const [fetchComplete, setFetchComplete] = useState(false);
   const [updatedFirestoreUser, setUpdatedFirestoreUser] = useState(false);
-  let firestoreCalls = 0;
-
-  function appendFirestoreMembers(members) {
-    console.log(`adding ${members.length} members`);
-    setFirestoreMembers(state => [...state, ...members]);
-    firestoreCalls++;
-    if (firestoreCalls === 4) setFetchComplete(true);
-  }
+  const [firestoreMembers, setFirestoreMembers] = useState([]);
+  const [fetch, setFetch] = useState({complete: false});
 
   useEffect(() => {
-    let members = [];
-    const lebanonUnsubscribe = firestore()
-      .collection(lebanonChaperones)
-      .orderBy('lastNameLower')
-      .onSnapshot({
-        error: e => console.error(e),
-        next: querySnapshot => {
-          members = [];
-          querySnapshot.forEach(doc => {
-            let d = doc.data();
-            d.firestoreId = doc.id;
-            d.collection = lebanonChaperones;
-            members.push(d);
-          });
-          appendFirestoreMembers(members);
-        },
-      });
-    const allDayUnsubscribe = firestore()
-      .collection(allDayChaperones)
-      .orderBy('lastNameLower')
-      .onSnapshot({
-        error: e => console.error(e),
-        next: querySnapshot => {
-          members = [];
-          querySnapshot.forEach(doc => {
-            let d = doc.data();
-            d.firestoreId = doc.id;
-            d.collection = allDayChaperones;
-            members.push(d);
-          });
-          appendFirestoreMembers(members);
-        },
-      });
-    const eveningUnsubscribe = firestore()
-      .collection(eveningChaperones)
-      .orderBy('lastNameLower')
-      .onSnapshot({
-        error: e => console.error(e),
-        next: querySnapshot => {
-          members = [];
-          querySnapshot.forEach(doc => {
-            let d = doc.data();
-            d.firestoreId = doc.id;
-            d.collection = eveningChaperones;
-            members.push(d);
-          });
-          appendFirestoreMembers(members);
-        },
-      });
-    const driversUnsubscribe = firestore()
-      .collection(drivers)
-      .orderBy('lastNameLower')
-      .onSnapshot({
-        error: e => console.error(e),
-        next: querySnapshot => {
-          members = [];
-          querySnapshot.forEach(doc => {
-            let d = doc.data();
-            d.firestoreId = doc.id;
-            d.collection = drivers;
-            members.push(d);
-          });
-          appendFirestoreMembers(members);
-        },
-      });
-    return () => {
-      allDayUnsubscribe();
-      eveningUnsubscribe();
-      lebanonUnsubscribe();
-      driversUnsubscribe();
-    };
+    setFirestoreMembers([]);
+    addCollectionsToFirestoreMembers(setFirestoreMembers, setFetch);
   }, []);
 
   useEffect(() => {
@@ -112,7 +32,6 @@ const DriversLicenseScan = props => {
       console.log('firestoreMembers: ' + firestoreMembers.length);
 
       async function updateFirestoreUser(collection) {
-        console.log('updating user', firestoreUser);
         await firestore()
           .collection(collection)
           .doc(firestoreUser.firestoreId)
@@ -126,15 +45,19 @@ const DriversLicenseScan = props => {
       function getMatch(matchingLastNames, driversLicense) {
         if (!matchingLastNames) return [];
         const matchingFirstNames = matchingLastNames.filter(user => {
+          const firstName =
+            user.firstName.length > 0
+              ? user.firstName.toLowerCase().trim()
+              : user.mailchimpMemberInfo.mergeFields.fname.toLowerCase().trim();
           return (
-            user.firstName.toLowerCase().trim() ===
+            firstName ===
             driversLicense.firstName
               .split(' ')[0]
               .toLowerCase()
               .trim()
           );
         });
-        console.log(`got ${matchingFirstNames} matching first names`);
+        console.log(`got ${matchingFirstNames.length} matching first names`);
         return matchingFirstNames;
       }
 
@@ -146,11 +69,10 @@ const DriversLicenseScan = props => {
           return foundMatch;
         });
         console.log(`got ${matchingLastNames.length} matching last names`);
-        if (matchingLastNames.length >= 1) {
-          driversLicenseLastNameMatchesFirestoreUser = true;
-        }
+
         const match = getMatch(matchingLastNames, driversLicense);
         if (match.length === 1) {
+          driversLicenseLastNameMatchesFirestoreUser = true;
           driversLicenseFirstNameMatchesFirestoreUser = true;
           firestoreUser = match[0];
         }
@@ -384,7 +306,7 @@ const DriversLicenseScan = props => {
     <View style={styles.page}>
       <View style={styles.sectionContainer}>
         <View style={styles.sectionContainer}>
-          {fetchComplete && (
+          {fetch.complete && (
             <View style={styles.buttonContainer}>
               <TouchableOpacity style={styles.button} onPress={scan.bind(this)}>
                 <Text style={styles.buttonText}> Scan </Text>
@@ -423,7 +345,7 @@ const DriversLicenseScan = props => {
           <View style={styles.sectionContainer}>
             {scanComplete &&
               userHasValidDriversLicenseAndMailchimpMember &&
-              updatedFirestoreUser(<Text style={styles.goodScan}>GOOD</Text>)}
+              updatedFirestoreUser && <Text style={styles.goodScan}>GOOD</Text>}
             {scanComplete && !userHasValidDriversLicenseAndMailchimpMember && (
               <Text style={styles.badScan}>Couldn't find exact match</Text>
             )}

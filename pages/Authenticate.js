@@ -4,115 +4,109 @@ import {Formik} from 'formik';
 import styles from '../styles';
 import {useUser} from '../contexts/user.context';
 import firestore from '@react-native-firebase/firestore';
+import DeviceInfo from 'react-native-device-info';
+import {setMembersByValue} from '../services/firestore.service';
 
 const Authenticate = props => {
   const [user, setUser] = useUser();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
-  const [errorMessage, setErrorMessage] = useState();
-  const [finishedSearchingMembers, setFinishedSearchingMembers] = useState(
-    false,
-  );
-  const [
-    matchingEmailFirestoreMembers,
-    setmatchingEmailFirestoreMembers,
-  ] = useState([]);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [formValues, setFormValues] = useState(user);
+  const deviceId = DeviceInfo.getUniqueId();
+  const [matchingFirestoreMembers, setMatchingFirestoreMembers] = useState([]);
+  const [fetch, setFetch] = useState({complete: false});
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated && isFinished) {
       props.navigation.navigate('HomePage');
-    } else if (!isAuthenticated && isFinished && finishedSearchingMembers) {
+    } else if (!isAuthenticated && isFinished) {
+      console.log(isFinished);
       setErrorMessage(
         "Couldn't find a user registered with that email and phone number",
       );
-    } else if (isAuthenticated && !isFinished) {
     }
-  }, [isFinished, isAuthenticated, finishedSearchingMembers]);
+  }, [isFinished, isAuthenticated]);
+
+  function getMatch(matchingEmails) {
+    if (!matchingEmails) return [];
+    const matchingPhones = matchingEmails.filter(user => {
+      return (
+        user.phone.replace(/\D/g, '') === formValues.phone.replace(/\D/g, '')
+      );
+    });
+    console.log(`got ${matchingPhones.length} matching phones`);
+    return matchingPhones;
+  }
+
+  async function updateFirestoreUser(firestoreUser) {
+    unsub = await firestore()
+      .collection(firestoreUser.collection)
+      .doc(firestoreUser.firestoreId)
+      .update({
+        firstName: firestoreUser.firstName,
+        lastName: firestoreUser.lastName,
+        email: firestoreUser.email,
+        emailLower: firestoreUser.emailLower,
+        phone: firestoreUser.phone,
+        lastUpdated: firestoreUser.lastUpdated,
+        type: user.type,
+        firestoreId: firestoreUser.firestoreId,
+        collection: firestoreUser.collection,
+        deviceId: deviceId,
+      });
+    setIsAuthenticated(true);
+    setIsFinished(true);
+    setSubmitting(false);
+  }
 
   useEffect(() => {
-    async function authUser() {
-      let firestoreUser = null;
-      if (matchingEmailFirestoreMembers.length > 1) {
-        const match = matchingEmailFirestoreMembers.filter(firestoreUser => {
-          return (
-            firestoreUser.phone.replace(/\D/g, '') ===
-            user.phone.replace(/\D/g, '')
-          );
-        });
-        if (match.length === 1) {
-          firestoreUser = match[0];
-        }
-      } else {
-        firestoreUser = matchingEmailFirestoreMembers[0];
-      }
-
-      if (firestoreUser) {
-        // update firebase user
-        firestoreUser.firstName = user.firstName;
-        firestoreUser.lastName = user.lastName;
-        firestoreUser.email = user.email;
-        firestoreUser.emailLower = user.email.toLowerCase();
-        firestoreUser.phone = user.phone;
-        firestoreUser.lastUpdated = new Date();
-        firestoreUser.type = user.type;
-        setUser(firestoreUser);
-        await firestore()
-          .collection('members')
-          .doc(firestoreUser.firestoreId)
-          .update({
-            firstName: firestoreUser.firstName,
-            lastName: firestoreUser.lastName,
-            email: firestoreUser.email,
-            emailLower: firestoreUser.emailLower,
-            phone: firestoreUser.phone,
-            lastUpdated: firestoreUser.lastUpdated,
-            type: firestoreUser.type,
-            firestoreId: firestoreUser.firestoreId,
-            collection: firestoreUser.collection,
-            deviceId: deviceId,
-          });
-        setIsAuthenticated(true);
-        setIsFinished(true);
-      } else {
-        setIsAuthenticated(false);
-        setIsFinished(true);
-      }
+    let firestoreUser = null;
+    if (matchingFirestoreMembers.length === 0) {
+      setIsFinished(true);
+      setSubmitting(false);
+      return () => {};
     }
-    authUser();
-  }, [finishedSearchingMembers]);
+    firestoreUser =
+      matchingFirestoreMembers.length > 1
+        ? getMatch(matchingFirestoreMembers)[0]
+        : matchingFirestoreMembers[0];
+
+    if (firestoreUser) {
+      console.log('found matching user');
+      // update firebase user
+      firestoreUser.firstName = formValues.firstName;
+      firestoreUser.lastName = formValues.lastName;
+      firestoreUser.email = formValues.email;
+      firestoreUser.emailLower = formValues.email.toLowerCase();
+      firestoreUser.phone = formValues.phone;
+      firestoreUser.lastUpdated = new Date();
+      firestoreUser.type = formValues.type;
+      firestoreUser.deviceId = deviceId;
+      setUser(firestoreUser);
+      updateFirestoreUser(firestoreUser);
+    } else {
+      setIsFinished(true);
+      setSubmitting(false);
+    }
+    return () => {};
+  }, [fetch, formValues]);
 
   const authenticateOrganizer = values => {
     if (values.code === '8259') props.navigation.navigate('HomePage');
   };
 
-  const authenticateUser = async user => {
-    let firestoreUserList = [];
-    const collections = [
-      'allDayChaperones',
-      'eveningChaperones',
-      'lebanonChaperones',
-      'drives',
-    ];
-    collections.forEach((collection, index) => {
-      const querySnapshot = firestore()
-        .collection(collection)
-        .where('emailLower', '==', user.email.toLowerCase())
-        .onSnapshot({
-          error: e => console.error(e),
-          next: querySnapshot => {
-            querySnapshot.forEach(doc => {
-              let d = doc.data();
-              d.firestoreId = doc.id;
-              d.collection = collection;
-              firestoreUserList.push(d);
-            });
-            if (index === collections.length - 1) {
-              setFinishedSearchingMembers(true);
-              setmatchingEmailFirestoreMembers(firestoreUserList);
-            }
-          },
-        });
-    });
+  const authenticateUser = values => {
+    setErrorMessage('');
+    setSubmitting(true);
+    setMembersByValue(
+      values.email.toLowerCase(),
+      'emailLower',
+      setMatchingFirestoreMembers,
+      setFetch,
+    );
+    setFormValues(values);
   };
 
   return (
@@ -168,9 +162,13 @@ const Authenticate = props => {
                 />
               </View>
             )}
-            {!!errorMessage && (
+            {!!errorMessage && fetch.complete && (
               <Text style={styles.errorMessage}>{errorMessage}</Text>
             )}
+            {submitting && (
+              <Text style={styles.sectionText}>Signing in...</Text>
+            )}
+
             <View style={styles.sectionContainer}>
               <TouchableOpacity style={styles.button} onPress={handleSubmit}>
                 <Text style={styles.buttonText}> Submit </Text>

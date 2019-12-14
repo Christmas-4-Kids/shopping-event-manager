@@ -60,7 +60,7 @@ export default styles = StyleSheet.create({
   sectionContainer: {
     flex: 1,
     backgroundColor: '#112430',
-    marginTop: 32,
+    marginTop: 20,
     paddingHorizontal: 24,
   },
   sectionTitle: {
@@ -98,7 +98,7 @@ export default styles = StyleSheet.create({
   badScan: {
     textAlign: 'center',
     color: '#EF334C',
-    fontSize: 40,
+    fontSize: 20,
     fontWeight: '700',
     padding: 20,
   },
@@ -120,6 +120,7 @@ export default styles = StyleSheet.create({
     right: 1,
   },
   memberName: {
+    color: '#fff',
     fontSize: 16,
   },
   memberVerified: {

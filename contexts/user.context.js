@@ -5,17 +5,10 @@ const UserStateContext = React.createContext();
 export const UserProvider = ({children}) => {
   const [user, setUser] = useState({
     type: '',
-    FirstName: '',
-    LastName: '',
-    Email: '',
-    Phone: '',
-    address: {city: '', state: '', street: ''},
-    verifiedByMailchimp: false,
-    verifiedByOrganizer: false,
-    arrived: false,
-    mailchimpUser: {},
-    driver: {},
-    kids: [],
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
   });
   return (
     <UserStateContext.Provider value={[user, setUser]}>

@@ -46,7 +46,7 @@
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* shoppingEventManagerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = shoppingEventManagerTests.m; sourceTree = "<group>"; };
 		139998B1239753D500D1AAFA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* shoppingEventManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = shoppingEventManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* Christmas 4 Kids.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Christmas 4 Kids.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = shoppingEventManager/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = shoppingEventManager/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB21A68108700A75B9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -192,7 +192,7 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* shoppingEventManager.app */,
+				13B07F961A680F5B00A75B9A /* Christmas 4 Kids.app */,
 				00E356EE1AD99517003FC87E /* shoppingEventManagerTests.xctest */,
 				2D02E47B1E0B4A5D006451C7 /* shoppingEventManager-tvOS.app */,
 				2D02E4901E0B4A5D006451C7 /* shoppingEventManager-tvOSTests.xctest */,
@@ -241,7 +241,7 @@
 			);
 			name = shoppingEventManager;
 			productName = shoppingEventManager;
-			productReference = 13B07F961A680F5B00A75B9A /* shoppingEventManager.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* Christmas 4 Kids.app */;
 			productType = "com.apple.product-type.application";
 		};
 		2D02E47A1E0B4A5D006451C7 /* shoppingEventManager-tvOS */ = {
@@ -294,6 +294,7 @@
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = 27T5GXRZLW;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
@@ -629,6 +630,7 @@
 			baseConfigurationReference = 73C9E37D2230289D0CD40926 /* Pods-shoppingEventManagerTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = 27T5GXRZLW;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -653,6 +655,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = 27T5GXRZLW;
 				INFOPLIST_FILE = shoppingEventManagerTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -672,18 +675,19 @@
 			baseConfigurationReference = E39230FAEC2C3AF333B60B81 /* Pods-shoppingEventManager.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 1.12;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 27T5GXRZLW;
 				INFOPLIST_FILE = shoppingEventManager/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.12;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = c4k.shoppingEventManager;
-				PRODUCT_NAME = shoppingEventManager;
+				PRODUCT_NAME = "Christmas 4 Kids";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -693,17 +697,18 @@
 			baseConfigurationReference = 9228BA8F30390A7D1EB046C6 /* Pods-shoppingEventManager.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 1.12;
 				DEVELOPMENT_TEAM = 27T5GXRZLW;
 				INFOPLIST_FILE = shoppingEventManager/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.12;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = c4k.shoppingEventManager;
-				PRODUCT_NAME = shoppingEventManager;
+				PRODUCT_NAME = "Christmas 4 Kids";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
